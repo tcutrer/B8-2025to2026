@@ -7,12 +7,14 @@ Date: 11/11/2025
 This module implements a Binary Search Tree (BST) with insertion, search, and removal functionalities.
 """
 
+import pair
+
 class BST:
     class Node:
-        def __init__(self, key):
+        def __init__(self, key, count=1):
             self.left = None
             self.right = None
-            self.value = key
+            self.value = pair.Pair(key, count)
     
     def __init__(self):
         self.root = None
@@ -30,31 +32,31 @@ class BST:
         """Find a node with the given key in the BST."""
         currentNode = self.root
         while currentNode is not None:
-            if key == currentNode.value:
+            if key == currentNode.value.letter:
                 return currentNode
-            elif key < currentNode.value:
+            elif key < currentNode.value.letter:
                 currentNode = currentNode.left
             else:
                 currentNode = currentNode.right
         return None
 
     
-    def add(self, key):
+    def add(self, key, count=1):
         """Insert a new key into the BST."""
         currentNode = self.root
-        newNode = self.Node(key)
+        newNode = self.Node(key, count)
         if self.is_empty():
             self.root = newNode
             self._size += 1
             return
         while True:
-            if key < currentNode.value:
+            if key < currentNode.value.letter:
                 if currentNode.left is None:
                     currentNode.left = newNode
                     self._size += 1
                     return
                 currentNode = currentNode.left
-            elif key > currentNode.value:
+            elif key > currentNode.value.letter:
                 if currentNode.right is None:
                     currentNode.right = newNode
                     self._size += 1
@@ -78,9 +80,9 @@ class BST:
             return
         currentNode = self.root
         parentNode = None
-        while currentNode is not None and currentNode.value != key:
+        while currentNode is not None and currentNode.value.letter != key:
             parentNode = currentNode
-            if key < currentNode.value:
+            if key < currentNode.value.letter:
                 currentNode = currentNode.left
             else:
                 currentNode = currentNode.right
@@ -105,7 +107,7 @@ class BST:
             while successor.left is not None:
                 successorParent = successor
                 successor = successor.left
-            currentNode.value = successor.value
+            currentNode.value.letter = successor.value.letter
             if successorParent.left == successor:
                 successorParent.left = successor.right
             else:
@@ -118,7 +120,7 @@ class BST:
             result = []
         if node is not None:
             self.inorder_traversal(node.left, result)
-            result.append(node.value)
+            result.append(node.value.letter)
             self.inorder_traversal(node.right, result)
         return result
     
@@ -127,7 +129,7 @@ class BST:
         if result is None:
             result = []
         if node is not None:
-            result.append(node.value)
+            result.append(node.value.letter)
             self.preorder_traversal(node.left, result)
             self.preorder_traversal(node.right, result)
         return result
@@ -139,5 +141,5 @@ class BST:
         if node is not None:
             self.postorder_traversal(node.left, result)
             self.postorder_traversal(node.right, result)
-            result.append(node.value)
+            result.append(node.value.letter)
         return result
