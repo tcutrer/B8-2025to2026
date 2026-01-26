@@ -1,6 +1,6 @@
-from AVLNode import AVLNode
+from RBTNode import RBTNode
 
-class ExtendedAVLNode(AVLNode):
+class ExtendedRBTNode(RBTNode):
 
     def __init__(self, node_key):
         super().__init__(node_key)

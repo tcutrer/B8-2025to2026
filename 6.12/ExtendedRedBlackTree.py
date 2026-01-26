@@ -1,13 +1,13 @@
-from AVLTree import AVLTree
-from ExtendedAVLNode import ExtendedAVLNode
+from RedBlackTree import RedBlackTree
+from ExtendedRBTNode import ExtendedRBTNode
 
-class ExtendedAVLTree(AVLTree):
+class ExtendedRedBlackTree(RedBlackTree):
     def __init__(self):
         super().__init__()
 
-    # Each node in an ExtendedAVLTree is an ExtendedAVLNode
+    # Each node in an ExtendedRedBlackTree is an ExtendedRBTNode
     def make_new_node(self, key):
-        return ExtendedAVLNode(key)
+        return ExtendedRBTNode(key)
 
     def insert_node(self, node):
         super().insert_node(node)
@@ -61,4 +61,3 @@ class ExtendedAVLTree(AVLTree):
             return self._get_nth_helper(node.left, n)
         else:
             return self._get_nth_helper(node.right, n - left_count - 1)
-        
