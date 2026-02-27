@@ -11,8 +11,9 @@ class HashTable:
         self.initalHashValue = 5381  # Initial hash value
         self.hashMultiplier = 33  # Multiplier for hash function
         self.loadFactorThreshold = 0.7  # Threshold to trigger resizing
-        self.collisionCount = 0  # Counter for collisions
+        self.COLLISIONS = 0  # Counter for collisions
         self.bucketCount = 0  # Track used buckets to avoid O(n) counting
+        self.BUCKET_CHECK_COUNT = 0
 
     def _hash(self, key):
         hash_value = self.initalHashValue
@@ -25,19 +26,26 @@ class HashTable:
         inserted = False
         multiple = 1
         is_new = False
+        collided = False
         while not inserted:
+            self.BUCKET_CHECK_COUNT += 1
             if self.table[hashKey].isEmpty():
                 self.table[hashKey] = OpenAddressingBucket(key, value)
                 inserted = True
                 is_new = True
                 self.bucketCount += 1
+                if collided:
+                    self.COLLISIONS += 1
+                break
             elif self.table[hashKey].key == key:
                 self.table[hashKey].value = value
                 inserted = True
+                break
             else:
                 hashKey = (hashKey + 1) % self.size  # Linear probing
                 multiple += 1
-                self.collisionCount += 1
+                if not collided:
+                    collided = True
 
         # Only check resize if we added a new entry (not an update)
         if is_new and self.bucketCount / self.size > self.loadFactorThreshold:
@@ -50,11 +58,15 @@ class HashTable:
         hashKey = self._hash(key)
         multiple = 1
         is_new = False
+        collided = False
         while True:
+            self.BUCKET_CHECK_COUNT += 1
             if self.table[hashKey].isEmpty():
                 self.table[hashKey] = OpenAddressingBucket(key, value)
                 is_new = True
                 self.bucketCount += 1
+                if collided:
+                    self.COLLISIONS += 1
                 break
             elif self.table[hashKey].key == key:
                 # Update existing key
@@ -63,7 +75,8 @@ class HashTable:
             else:
                 hashKey = (hashKey + 1) % self.size  # Linear probing
                 multiple += 1
-                self.collisionCount += 1
+                if not collided:
+                    collided = True
         
         # Only check resize if we added a new entry
         if is_new and self.bucketCount / self.size > self.loadFactorThreshold:
@@ -109,16 +122,22 @@ class HashTable:
     def _insert_no_resize(self, key, value):
         """Insert without triggering resize checks (used during _resize)."""
         hashKey = self._hash(key)
+        collided = False
         while True:
+            self.BUCKET_CHECK_COUNT += 1
             if self.table[hashKey].isEmpty():
                 self.table[hashKey] = OpenAddressingBucket(key, value)
                 self.bucketCount += 1
+                if collided:
+                    self.COLLISIONS += 1
                 break
             elif self.table[hashKey].key == key:
                 self.table[hashKey].value = value
                 break
             else:
                 hashKey = (hashKey + 1) % self.size
+                if not collided:
+                    collided = True
 
 class OpenAddressingBucket:
     def __init__(self, bucket_key = None, bucket_value = None):
