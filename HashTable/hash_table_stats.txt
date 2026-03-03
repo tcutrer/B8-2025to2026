@@ -1,17 +1,17 @@
 Hash Table Performance Stats
 
 --- Original Table (Size 10) ---
-Total collisions: 15160
-Average bucket checks per insert/update: 1.24
+Total collisions: 15026
+Average bucket checks per insert/update: 696092
 --- Double Size Table ---
-Total collisions: 2576
-Average bucket checks per insert/update: 1.02
+Total collisions: 5062
+Average bucket checks per insert/update: 608210
 --- Triple Size Table ---
-Total collisions: 2124
-Average bucket checks per insert/update: 1.02
+Total collisions: 4119
+Average bucket checks per insert/update: 585951
 --- 1.5x Size Table ---
-Total collisions: 4111
-Average bucket checks per insert/update: 1.04
+Total collisions: 7720
+Average bucket checks per insert/update: 633619
 --- 1.25x Size Table ---
-Total collisions: 4126
-Average bucket checks per insert/update: 1.05
+Total collisions: 10195
+Average bucket checks per insert/update: 659554

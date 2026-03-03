@@ -12,7 +12,7 @@ def count_words_in_file(filename, table_size=10):
     word_count_table = HashTable(table_size)
     words_processed = 0
     # Compile regex pattern once instead of per word
-    punctuation_pattern = re.compile(r'[^\w\s]')
+    punctuation_pattern = re.compile(r'[^a-zA-Z]')
 
     with open(filename, 'r', encoding='utf-8') as file:
         for line in file:
@@ -29,7 +29,7 @@ def write_word_counts_to_file(hash_table, heading="Word Counts", words_processed
     with open(filename, 'a') as stats_file:
         stats_file.write(f"--- {heading} ---\n")
         stats_file.write(f"Total collisions: {hash_table.COLLISIONS}\n")
-        stats_file.write(f"Average bucket checks per insert/update: {hash_table.BUCKET_CHECK_COUNT / words_processed:.2f}\n")
+        stats_file.write(f"Average bucket checks per insert/update: {hash_table.BUCKET_CHECK_COUNT}\n")
 
 if __name__ == "__main__":
     file_to_read = 'war_and_peace.txt'
@@ -42,10 +42,10 @@ if __name__ == "__main__":
 
     # Run tests with different initial table sizes to see impact on collisions and performance
     word_counts, words_processed = count_words_in_file(filename)
-    double_size_table, double_words_processed = count_words_in_file(filename, table_size=word_counts.size * 2)
-    triple_size_table, triple_words_processed = count_words_in_file(filename, table_size=word_counts.size * 3)
-    three_halfs_size_table, three_halfs_words_processed = count_words_in_file(filename, table_size=int(word_counts.size * 1.5))
-    five_fourths_size_table, five_fourths_words_processed = count_words_in_file(filename, table_size=int(word_counts.size * 1.25))
+    double_size_table, double_words_processed = count_words_in_file(filename, table_size=word_counts.bucketCount * 2)
+    triple_size_table, triple_words_processed = count_words_in_file(filename, table_size=word_counts.bucketCount * 3)
+    three_halfs_size_table, three_halfs_words_processed = count_words_in_file(filename, table_size=int(word_counts.bucketCount * 1.5))
+    five_fourths_size_table, five_fourths_words_processed = count_words_in_file(filename, table_size=int(word_counts.bucketCount * 1.25))
 
     # write results to file
     write_word_counts_to_file(word_counts, heading="Original Table (Size 10)", words_processed=words_processed, filename=write_file)
@@ -55,3 +55,4 @@ if __name__ == "__main__":
     write_word_counts_to_file(five_fourths_size_table, heading="1.25x Size Table", words_processed=five_fourths_words_processed, filename=write_file)
 
     print("Word counting complete. Performance stats written to hash_table_stats.txt")
+    print(word_counts.bucketCount)
