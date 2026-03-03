@@ -32,12 +32,13 @@ def write_word_counts_to_file(hash_table, heading="Word Counts", words_processed
         stats_file.write(f"Average bucket checks per insert/update: {hash_table.BUCKET_CHECK_COUNT / words_processed:.2f}\n")
 
 if __name__ == "__main__":
+    file_to_read = 'war_and_peace.txt'
     script_dir = os.path.dirname(os.path.abspath(__file__))
     write_file = os.path.join(script_dir, 'hash_table_stats.txt')
     # Clear the stats file before writing new results
     with open(write_file, 'w') as f:
         f.write("Hash Table Performance Stats\n\n")
-    filename = os.path.join(script_dir, 'war_and_peace.txt')
+    filename = os.path.join(script_dir, file_to_read)
 
     # Run tests with different initial table sizes to see impact on collisions and performance
     word_counts, words_processed = count_words_in_file(filename)
